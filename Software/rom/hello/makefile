@@ -1,0 +1,5 @@
+SOURCES		= hello.s
+COMMONS		= via
+
+TARGET_OBJECTS	= $(SOURCES:%.s=$(ROM_BUILD)/%.o)
+TARGET_COMMONS	= $(COMMONS:%=$(COMMON_BUILD)/%.o)
