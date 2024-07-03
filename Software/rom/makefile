@@ -5,7 +5,7 @@ include $(TARGET_ROOT)/makefile
 TARGET_OBJECTS	= $(SOURCES:%.s=$(ROM_BUILD)/%.o)
 TARGET_COMMONS	= $(COMMONS:%=$(COMMON_BUILD)/%.o)
 
-$(ROM_BUILD)/hello.o: $(TARGET_ROOT)/hello.s
+$(ROM_BUILD)/%.o: $(TARGET_ROOT)/%.s
 	@$(MKDIR_BINARY) $(MKDIR_FLAGS) $(ROM_BUILD)
 	$(CA65_BINARY) $(CA65_FLAGS) -o $@ $^
 

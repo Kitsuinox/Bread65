@@ -1,2 +1,2 @@
 SOURCES		= hello.s
-COMMONS		= via
+COMMONS		= via delay zeropage

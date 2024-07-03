@@ -1,4 +1,4 @@
-TARGET		= hello
+TARGET		= lcd4bit
 CPU_TYPE	= 6502
 FIRMWARE_CFG	= mibu65.cfg
 
@@ -24,6 +24,9 @@ ROM_BUILD	= $(BUILD_ROOT)/rom
 BIN_BUILD	= $(BUILD_ROOT)/bin
 
 all:	$(BIN_BUILD)/$(TARGET).bin 
+
+clear:
+	rm -r build
 
 include	$(COMMON_ROOT)/makefile
 include	$(ROM_ROOT)/makefile

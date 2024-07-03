@@ -1,0 +1,10 @@
+.globalzp	SP
+.globalzp	SREG
+.globalzp	PTR0
+.globalzp	PTR1
+.globalzp	PTR2
+.globalzp	PTR3
+.globalzp	REG0
+.globalzp	REG1
+.globalzp	REG2
+.globalzp	REG3
