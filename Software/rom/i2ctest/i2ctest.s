@@ -21,14 +21,15 @@ main:	LDA	#50
 
 	LDA	#LCD_CMD_CLEAR
 	JSR	_lcd_tx_command
+	JSR	_delay_ms
 
 	LDA	#LCD_CMD_RETURN
 	JSR	_lcd_tx_command
+	JSR	_delay_ms
 
 	LDA	#00
 	STA	PTR0
 	STA	PTR0+1
-
 
 @loop:	JSR	_24lc_read
 	BCS	@err
