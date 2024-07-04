@@ -1,4 +1,4 @@
-TARGET		= lcd4bit
+TARGET		= i2ctest
 CPU_TYPE	= 6502
 FIRMWARE_CFG	= mibu65.cfg
 

@@ -6,8 +6,8 @@
 .export	_lcd_tx_data
 .export _lcd_tx_string
 
-LCD_DDR		= VIA0_DDRB
-LCD_IOR		= VIA0_IORB
+LCD_DDR		= VIA0_DDRA
+LCD_IOR		= VIA0_IORA
 LCD_DATA_MASK	= $0F
 LCD_RS		= $10
 LCD_RW		= $20

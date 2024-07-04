@@ -1,0 +1,118 @@
+.include	"zeropage.inc"
+.include	"via.inc"
+
+I2C_DDR	= VIA0_DDRB
+I2C_IOR	= VIA0_IORB
+I2C_SDA	= $01
+I2C_SCL	= $02
+
+.export	_i2c_start
+.export _i2c_stop
+.export	_i2c_send
+.export	_i2c_recv
+.export _i2c_ack
+
+.code
+_i2c_start:
+	PHA
+	
+	LDA	I2C_DDR
+	ORA	#(I2C_SDA | I2C_SCL)
+	STA	I2C_DDR
+	
+	LDA	I2C_IOR
+	ORA	#(I2C_SDA | I2C_SCL)
+	STA	I2C_IOR
+	
+	EOR	#I2C_SDA
+	STA	I2C_IOR
+	
+	EOR	#I2C_SCL
+	STA	I2C_IOR
+	
+	PLA
+	RTS
+
+_i2c_stop:
+	PHA
+	
+	LDA	I2C_DDR
+	ORA	#(I2C_SDA | I2C_SCL)
+	STA	I2C_DDR
+	
+	LDA	I2C_IOR
+	AND	#~(I2C_SDA)+256
+	ORA	#I2C_SCL
+	STA	I2C_IOR
+
+	EOR	#I2C_SDA
+	STA	I2C_IOR
+
+	PLA
+	RTS
+
+_i2c_send:
+	PHA	;(0->1)
+	
+	PHA
+	LDA	I2C_DDR
+	ORA	#(I2C_SDA | I2C_SCL)
+	STA	I2C_DDR
+	PLA
+
+	LDX	#8
+@loop:	CLC
+	ROL
+	PHA	;(n->n+1)
+	LDA	I2C_IOR
+	BCC	@sda0
+@sda1:	ORA	#I2C_SDA
+	JMP	@cont
+@sda0:	AND	#(~I2C_SDA)+256
+@cont:	STA	I2C_IOR
+	EOR	#I2C_SCL
+	STA	I2C_IOR
+	EOR	#I2C_SCL
+	STA	I2C_IOR
+	PLA	;(n+1->n)
+	DEX
+	BNE	@loop
+	PLA
+	RTS
+
+_i2c_recv:
+	LDA	I2C_DDR
+	AND	#(~I2C_SDA)+256
+	STA	I2C_DDR
+	LDX	#8
+@loop:	PHA
+	LDA	I2C_IOR
+	EOR	#I2C_SCL
+	STA	I2C_IOR
+	LDA	I2C_IOR
+	CLC
+	ROR
+	LDA	I2C_IOR
+	EOR	#I2C_SCL
+	STA	I2C_IOR
+	PLA
+	ROL
+	DEX
+	BNE	@loop
+	RTS
+
+_i2c_ack:
+	PHA
+	LDA	I2C_DDR
+	AND	#(~I2C_SDA)+256
+	STA	I2C_DDR
+	LDA	I2C_IOR
+	EOR	#I2C_SCL
+	STA	I2C_IOR
+	LDA	I2C_IOR
+	ROR
+	LDA	I2C_IOR
+	EOR	#I2C_SCL
+	STA	I2C_IOR
+	PLA
+	RTS
