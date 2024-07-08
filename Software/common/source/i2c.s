@@ -81,6 +81,7 @@ _i2c_send:
 	RTS
 
 _i2c_recv:
+	PHP
 	LDA	I2C_DDR
 	AND	#(~I2C_SDA)+256
 	STA	I2C_DDR
@@ -99,6 +100,22 @@ _i2c_recv:
 	ROL
 	DEX
 	BNE	@loop
+	PLP
+	PHA
+	LDA	I2C_DDR
+	ORA	#I2C_SDA
+	STA	I2C_DDR
+	LDA	I2C_IOR
+	BCS	@nack
+@ack:	AND	#(~I2C_SDA)+256
+	JMP	@end
+@nack:	ORA	#I2C_SDA
+@end:	STA	I2C_IOR
+	EOR	#I2C_SCL
+	STA	I2C_IOR
+	EOR	#I2C_SCL
+	STA	I2C_IOR
+	PLA
 	RTS
 
 _i2c_ack:
